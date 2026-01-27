@@ -1,4 +1,4 @@
-import heroVideo from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/hero saction video.mp4";
+import heroVideo from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/hero section.mp4";
 
 export function HeroSection() {
   return (

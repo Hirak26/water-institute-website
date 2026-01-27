@@ -1,37 +1,43 @@
 import { Search, Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation } from "react-router";
 
-// ✅ Import the logo image
+// ✅ Use relative import (NOT C:/...)
 import waterInstituteLogo from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Water Institute logo.jpg";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const location = useLocation();
+  const searchRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location]);
+  useEffect(() => setIsMenuOpen(false), [location]);
 
-  const navigationLinks = [
-    { name: "Mission", href: "/#mission" },
-    { name: "Research", href: "/#research" },
-    { name: "Projects", href: "/#projects" },
-    { name: "About", href: "/#about" },
-    { name: "Team", href: "/#meet-the-team" },
-    { name: "Publications", href: "/#publications" },
-    { name: "Programs", href: "/#research-programs" },
-    { name: "Partners", href: "/#partners" },
-    { name: "Contact", href: "/#contact" },
-  ];
-const scrollToSection = (e: any, href: string) => {
+  const navigationLinks = useMemo(
+    () => [
+      { name: "Mission", href: "/#mission" },
+      { name: "Research", href: "/#research" },
+      { name: "Projects", href: "/#projects" },
+      { name: "About", href: "/#about" },
+      { name: "Team", href: "/#meet-the-team" },
+      { name: "Publications", href: "/#publications" },
+      { name: "Programs", href: "/#research-programs" },
+      { name: "Partners", href: "/#partners" },
+      { name: "Contact", href: "/#contact" },
+    ],
+    []
+  );
+
+  const scrollToSection = (e: React.MouseEvent, href: string) => {
     if (!href.startsWith("/#")) return;
 
     e.preventDefault();
     const id = href.substring(2);
 
-    // If not on home page, go home first
+    // If not on home page, go home first (then browser will jump)
     if (location.pathname !== "/") {
       window.location.href = href;
       return;
@@ -47,25 +53,66 @@ const scrollToSection = (e: any, href: string) => {
     window.scrollTo({ top: offsetPosition, behavior: "smooth" });
   };
 
-  const scrollToTop = (e: any) => {
-    e.preventDefault();
-
-    if (location.pathname !== "/") {
-      window.location.href = "/";
-      return;
-    }
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const toggleSearch = () => {
+    setIsSearchOpen((v) => !v);
+    setQuery("");
   };
+
+  // Auto-focus search input when opened
+  useEffect(() => {
+    if (isSearchOpen) {
+      setTimeout(() => inputRef.current?.focus(), 0);
+    }
+  }, [isSearchOpen]);
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const onClick = (ev: MouseEvent) => {
+      if (!isSearchOpen) return;
+      const target = ev.target as Node;
+      if (searchRef.current && !searchRef.current.contains(target)) {
+        setIsSearchOpen(false);
+        setQuery("");
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [isSearchOpen]);
+
+  // Close search with ESC
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === "Escape") {
+        setIsSearchOpen(false);
+        setQuery("");
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return navigationLinks.filter((l) => l.name.toLowerCase().includes(q));
+  }, [query, navigationLinks]);
 
   return (
     <header className="bg-[#1a1a1a] text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Header */}
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link
-            to="/"
+          {/* Logo + Text (click returns to top smoothly) */}
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              if (location.pathname !== "/") {
+                window.location.href = "/";
+                return;
+              }
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             className="flex items-center gap-3 hover:opacity-90 transition-opacity"
           >
             <img
@@ -81,10 +128,10 @@ const scrollToSection = (e: any, href: string) => {
                 Purdue University Northwest
               </span>
             </div>
-          </Link>
+          </a>
 
           {/* Desktop Quick Links */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-3 relative">
             <a
               href="https://www.pnw.edu/"
               target="_blank"
@@ -93,21 +140,67 @@ const scrollToSection = (e: any, href: string) => {
             >
               About PNW
             </a>
-            <button className="p-2 hover:bg-[#2a2a2a] rounded-lg transition-colors">
-              <Search className="w-5 h-5" />
-            </button>
+
+            {/* Search */}
+            <div className="relative" ref={searchRef}>
+              <button
+                type="button"
+                onClick={toggleSearch}
+                className="p-2 hover:bg-[#2a2a2a] rounded-lg transition-colors"
+                aria-label="Search sections"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+
+              {isSearchOpen && (
+                <div className="absolute right-0 mt-2 w-72 bg-white text-gray-900 rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+                  <div className="p-3 border-b border-gray-200">
+                    <input
+                      ref={inputRef}
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search sections (e.g., Projects)..."
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#CFB991]"
+                    />
+                    <p className="text-xs text-gray-500 mt-2">
+                      Press <span className="font-semibold">Esc</span> to close
+                    </p>
+                  </div>
+
+                  <div className="max-h-60 overflow-auto">
+                    {query.trim() && results.length === 0 && (
+                      <div className="px-4 py-3 text-sm text-gray-600">
+                        No matches found.
+                      </div>
+                    )}
+
+                    {(results.length ? results : navigationLinks.slice(0, 6)).map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        onClick={(e) => {
+                          scrollToSection(e, link.href);
+                          setIsSearchOpen(false);
+                          setQuery("");
+                        }}
+                        className="block px-4 py-3 text-sm hover:bg-gray-50 transition-colors"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Mobile Menu Button */}
           <button
             className="lg:hidden p-2 hover:bg-[#2a2a2a] rounded-lg transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Open menu"
           >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
@@ -154,10 +247,6 @@ const scrollToSection = (e: any, href: string) => {
                 >
                   About PNW
                 </a>
-                <button className="flex items-center gap-2 py-2 text-sm hover:text-[#CFB991] transition-colors">
-                  <Search className="w-5 h-5" />
-                  Search
-                </button>
               </div>
             </div>
           </nav>

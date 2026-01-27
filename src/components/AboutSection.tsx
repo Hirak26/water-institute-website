@@ -68,7 +68,7 @@ export function AboutSection() {
 
               {/* Caption */}
               <div className="px-4 py-3 text-sm text-gray-700 border-t border-black/10 bg-white/70">
-                PNW Water Institute lab space & experimental platforms
+                PNW Water Institute Lab Space
               </div>
             </div>
           </div>
