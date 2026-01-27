@@ -4,7 +4,12 @@ import { Link } from "react-router";
 import project1Image from "figma:asset/e455f4355ceb26cf9cff27ffa418bcb4fb050790.png";
 import project2Image from "figma:asset/aa8a40833145a45a5fda73daf304a0040c9ed179.png";
 import project3Image from "figma:asset/268c275e662dbb94be733307a24adf70ad6dff25.png";
-import project4Image from "figma:asset/43aab7abc80b4d30422354d9c3fe2f73020a65eb.png";
+import project4Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide4.PNG";
+import project5Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide5.PNG";
+import project6Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide6.PNG";
+import project7Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide7.PNG";
+import project8Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide8.PNG";
+
 
 export function CurrentProjectsSection() {
   const projects = [
@@ -58,7 +63,7 @@ export function CurrentProjectsSection() {
       slug: "nutrient-recovery-in-hydroponic",
       title:
         "Nutrient Recovery in Hydroponic Solutions Coupled with Wastewater Polishing via HYBER",
-      image: project4Image,
+      image: project5Image,
       team: [
         { name: "Khin Thandar Tun", slug: "khin-thandar-tun" },
         { name: "Nachiket Aparajithan Magesh", slug: "#" },
@@ -70,7 +75,7 @@ export function CurrentProjectsSection() {
       slug: "influence-of-water-quality",
       title:
         "Influence of Water Quality Parameters on Lettuce Growth in Deep-Water Culture Hydroponic Systems",
-      image: project4Image,
+      image: project6Image,
       team: [
         { name: "Chandlar Burks", slug: "#" },
         { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -81,7 +86,7 @@ export function CurrentProjectsSection() {
       slug: "cyber-physical-security",
       title:
         "Cyber-Physical Vulnerabilities and Resilience Pathways in Bench-Scale Anaerobic Digestion (W8 Digester)",
-      image: project4Image,
+      image: project7Image,
       team: [
         { name: "Hirak Modi", slug: "hirak-modi" },
         { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -92,7 +97,7 @@ export function CurrentProjectsSection() {
       slug: "design-operation-and-analysis",
       title:
         "Design, Operation and Analysis of 3D Printed Membrane Capacitive Deionization for Nutrient Recovery and Desalination",
-      image: project4Image,
+      image: project8Image,
       team: [
         { name: "Zubairullah Khan Mohammed", slug: "zubairullah-khan-mohammed" },
         { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }

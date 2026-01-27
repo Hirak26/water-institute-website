@@ -7,19 +7,21 @@ import {
 } from "lucide-react";
 import { ImageWithFallback } from "../../components/figma/ImageWithFallback";
 import { useState } from "react";
-import project1ImagePoster from "figma:asset/e455f4355ceb26cf9cff27ffa418bcb4fb050790.png";
-import project2ImagePoster from "figma:asset/aa8a40833145a45a5fda73daf304a0040c9ed179.png";
-import project3ImagePoster from "figma:asset/268c275e662dbb94be733307a24adf70ad6dff25.png";
-import project4Image from "figma:asset/43aab7abc80b4d30422354d9c3fe2f73020a65eb.png";
-
+import project1Image from "figma:asset/e455f4355ceb26cf9cff27ffa418bcb4fb050790.png";
+import project2Image from "figma:asset/aa8a40833145a45a5fda73daf304a0040c9ed179.png";
+import project3Image from "figma:asset/268c275e662dbb94be733307a24adf70ad6dff25.png";
+import project4Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide4.PNG";
+import project5Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide5.PNG";
+import project6Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide6.PNG";
+import project7Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide7.PNG";
+import project8Image from "C:/Users/PNW_checkout/Downloads/Water Institute website/src/assets/Slide8.PNG";
 const projectsData = {
   "ion-exchange-membranes": {
     id: 1,
     slug: "ion-exchange-membranes",
     title:
       "Effects of Ion Exchange Membranes on Wastewater Treatment",
-    image: project4Image,
-    poster: project1ImagePoster,
+    poster: project1Image,
     team: [
       { name: "Khin Thandar Tun", slug: "khin-thandar-tun" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -33,8 +35,7 @@ The dual-chamber system uses carbon felt electrodes and a centrally placed ion e
     slug: "bioelectrochemical-recovery-of-bicarbonate-and-phosphorus",
     title:
       "Bioelectrochemical Recovery of Bicarbonate and Phosphorus from Hydroponic Media Integrated with Wastewater Treatment",
-    image: project4Image,
-    poster: project2ImagePoster,
+    poster: project2Image,
     team: [
       { name: "Khin Thandar Tun", slug: "khin-thandar-tun" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -48,8 +49,7 @@ The design incorporates a central experimental chamber flanked by anode and cath
     slug: "microalgae-assisted-anaerobic-process",
     title:
       "Microalgae assisted anaerobic process for energy positive low-strength municipal wastewater treatment",
-    image: project4Image,
-    poster: project3ImagePoster,
+    poster: project3Image,
     team: [
       { name: "Khin Thandar Tun", slug: "khin-thandar-tun" },
       { name: "Aeneas Robert Hoffman", slug: "#" },
@@ -64,7 +64,7 @@ The reactor design features a two-membrane microbial fuel cell with carbon-based
     slug: "predicting-per-and-polyfluoro-alkyl",
     title:
       "Predicting Per and Polyfluoro-alkyl Substance Uptake by Agricultural Crops Using Machine Learning Tools",
-    image: project4Image,
+    poster: project4Image,
     team: [
       { name: "Shalini Kandlamadugu Madanmohan", slug: "#" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -80,7 +80,7 @@ To enhance model interpretability, feature importance analysis and Local Interpr
     slug: "nutrient-recovery-in-hydroponic",
     title:
       "Nutrient Recovery in Hydroponic Solutions Coupled with Wastewater Polishing via HYBER",
-    image: project4Image,
+    poster: project5Image,
     team: [
       { name: "Khin Thandar Tun", slug: "khin-thandar-tun" },
       { name: "Nachiket Aparajithan Magesh", slug: "#" },
@@ -95,7 +95,7 @@ The reactor design incorporates digital multimeters, LED lighting, and hydroponi
     slug: "influence-of-water-quality",
     title:
       "Influence of Water Quality Parameters on Lettuce Growth in Deep-Water Culture Hydroponic Systems",
-    image: project4Image,
+    poster: project6Image,
     team: [
       { name: "Chandlar Burks", slug: "#" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -109,7 +109,7 @@ The system uses a two-tier DWC setup with 72 lettuce plants, full-spectrum LED l
     slug: "cyber-physical-security",
     title:
       "Cyber-Physical Vulnerabilities and Resilience Pathways in Bench-Scale Anaerobic Digestion (W8 Digester)",
-    image: project4Image,
+    poster: project7Image,
     team: [
       { name: "Hirak Modi", slug: "hirak-modi" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -127,7 +127,7 @@ The findings emphasize the need for cyber-resilient design strategies, including
     slug: "design-operation-and-analysis",
     title:
       "Design, Operation and Analysis of 3D Printed Membrane Capacitive Deionization for Nutrient Recovery and Desalination",
-    image: project4Image,
+    poster: project8Image,
     team: [
       { name: "Zubairullah Khan Mohammed", slug: "zubairullah-khan-mohammed" },
       { name: "Dr. Veera Gnaneswar Gude", slug: "dr-veera-gnaneswar-gude" }
@@ -209,19 +209,11 @@ export function ProjectDetail() {
         </div>
       </div>
       {/* Main Content */}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
           {/* Main Column */}
           <div className="lg:col-span-2 space-y-12">
-            {/* Project Image */}
-            <div className="rounded-lg overflow-hidden shadow-lg">
-              <ImageWithFallback
-                src={project.image}
-                alt={project.title}
-                className="w-full h-64 md:h-96 object-cover"
-              />
-            </div>
-
             {/* Overview */}
             <div>
               <h2 className="text-2xl md:text-3xl mb-6">
@@ -238,43 +230,20 @@ export function ProjectDetail() {
               </div>
             </div>
 
-            {/* Research Poster Section */}
-            {project.poster && (
-              <div>
-                <h2 className="text-2xl md:text-3xl mb-6">
-                  Research Poster
-                </h2>
-                <div className="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
-                  <div className="relative group">
-                    <img 
-                      src={project.poster} 
-                      alt={`${project.title} - Research Poster`}
-                      className="w-full rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow"
-                      onClick={() => setIsPosterOpen(true)}
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity rounded-lg flex items-center justify-center">
-                      <ExternalLink className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  </div>
-                  <div className="mt-4 flex gap-3 justify-center">
-                    <button
-                      onClick={() => setIsPosterOpen(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-[#CFB991] text-white rounded-lg hover:bg-[#b8a67d] transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      View Full Size
-                    </button>
-                    <button
-                      onClick={downloadPoster}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      Download
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Project Image */}
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <ImageWithFallback
+                src={project.poster}
+                alt={project.title}
+                className="w-full h-auto object-contain bg-white"
+              />
+              <div className="bg-gray-50 p-4 sm:p-6 rounded-lg border-2 border-gray-200">
+  <div className="max-w-4xl mx-auto">
+  </div>
+</div>
+
+            </div>
+
           </div>
         </div>
       </div>

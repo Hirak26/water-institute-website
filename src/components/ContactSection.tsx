@@ -1,3 +1,8 @@
+// ContactSection.tsx
+// ✅ Frontend contact section that sends form data to your backend endpoint:
+// POST http://localhost:5050/api/contact
+// Backend will email: hirakmodi26@gmail.com (per your Node/Nodemailer setup)
+
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useState } from "react";
 
@@ -6,22 +11,46 @@ export function ContactSection() {
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSending, setIsSending] = useState(false);
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! We will get back to you soon.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+
+    if (isSending) return;
+
+    try {
+      setIsSending(true);
+
+      const res = await fetch("http://localhost:5050/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        alert(data?.error || "Failed to send message. Please try again.");
+        return;
+      }
+
+      alert("Thank you! Your message has been sent.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      alert("Server not reachable. Please try again later.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleChange = (e: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   return (
@@ -39,7 +68,7 @@ export function ContactSection() {
           {/* Contact Information */}
           <div>
             <h3 className="text-2xl mb-8">Get In Touch</h3>
-            
+
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-[#CFB991] rounded-full flex items-center justify-center flex-shrink-0">
@@ -48,10 +77,13 @@ export function ContactSection() {
                 <div>
                   <h4 className="text-lg mb-1">Address</h4>
                   <p className="text-gray-700">
-                    Water Institute<br />
-                    Purdue University Northwest<br />
-                    2200 169th Street<br />
-                    Hammond, IN 46323
+                    Water Institute
+                    <br />
+                    Purdue University Northwest
+                    <br />
+                    2540 169th St. Schneider Avenue Building
+                    <br />
+                    Hammond, Indiana 46323
                   </p>
                 </div>
               </div>
@@ -62,7 +94,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <h4 className="text-lg mb-1">Phone</h4>
-                  <p className="text-gray-700">(219) 989-2400</p>
+                  <p className="text-gray-700">(219) 989-8373</p>
                 </div>
               </div>
 
@@ -89,6 +121,7 @@ export function ContactSection() {
           {/* Contact Form */}
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h3 className="text-2xl mb-6">Send us a Message</h3>
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm mb-2 text-gray-700">
@@ -156,11 +189,20 @@ export function ContactSection() {
 
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition-colors flex items-center justify-center gap-2"
+                disabled={isSending}
+                className={`w-full px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                  isSending
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-[#1a1a1a] text-white hover:bg-[#2a2a2a]"
+                }`}
               >
                 <Send className="w-5 h-5" />
-                Send Message
+                {isSending ? "Sending..." : "Send Message"}
               </button>
+
+              <p className="text-xs text-gray-500 text-center">
+                This form sends your message to our team via a secure server endpoint.
+              </p>
             </form>
           </div>
         </div>

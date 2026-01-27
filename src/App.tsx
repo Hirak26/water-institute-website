@@ -5,6 +5,7 @@ import { HomePage } from "./pages/HomePage";
 import { ProjectDetail } from "./pages/projects/ProjectDetail";
 import { TeamMemberDetail } from "./pages/team/TeamMemberDetail";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
