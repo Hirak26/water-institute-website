@@ -16,35 +16,30 @@ export function ContactSection() {
 
   const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (isSending) return;
+  try {
+    const res = await fetch(import.meta.env.VITE_API_URL + "/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-    try {
-      setIsSending(true);
+    const data = await res.json();
 
-      const res = await fetch("http://localhost:5050/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        alert(data?.error || "Failed to send message. Please try again.");
-        return;
-      }
-
-      alert("Thank you! Your message has been sent.");
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    } catch {
-      alert("Server not reachable. Please try again later.");
-    } finally {
-      setIsSending(false);
+    if (!data.ok) {
+      alert("Failed to send. Please try again.");
+      return;
     }
-  };
+
+    alert("Thank you! Your message has been sent.");
+    setFormData({ name: "", email: "", subject: "", message: "" });
+  } catch (err) {
+    alert("Network error. Please try again.");
+  }
+};
+
 
   const handleChange = (e: any) => {
     setFormData((prev) => ({
